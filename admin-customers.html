@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - View Customers</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      color: #333;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    h2 {
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    .user-card {
+      width: 80%;
+      margin: 15px auto;
+      padding: 15px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    a {
+      display: block;
+      text-align: center;
+      margin: 20px auto;
+      text-decoration: none;
+      color: #4e54c8;
+      font-weight: bold;
+    }
+
+    /* Dark Mode Styles */
+    body.dark {
+      background-color: #121212;
+      color: #f1f1f1;
+    }
+
+    body.dark .user-card {
+      background-color: #2c2c2c;
+      border-color: #444;
+    }
+
+    body.dark a {
+      color: #8f94fb;
+    }
+  </style>
+</head>
+<body>
+  <h2>Registered Customers 👥</h2>
+  <div id="customersContainer"></div>
+  <br>
+  <a href="admin-dashboard.html">⬅️ Back to Dashboard</a>
+
+  <script>
+    // Admin access check
+    if (!localStorage.getItem("adminLoggedIn")) {
+      window.location.href = "admin-login.html";
+    }
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const container = document.getElementById("customersContainer");
+
+    if (users.length === 0) {
+      container.innerHTML = "<p style='text-align:center;'>No users registered.</p>";
+    } else {
+      users.forEach((user, index) => {
+        const div = document.createElement("div");
+        div.className = "user-card";
+        div.innerHTML = `
+          <h3>Customer #${index + 1}</h3>
+          <p><strong>Name:</strong> ${user.name}</p>
+          <p><strong>Email:</strong> ${user.email}</p>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // Dark mode setup
+    if (localStorage.getItem("darkMode") === "enabled") {
+      document.body.classList.add("dark");
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark");
+      const isDark = document.body.classList.contains("dark");
+      localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
+    }
+  </script>
+</body>
+</html>
